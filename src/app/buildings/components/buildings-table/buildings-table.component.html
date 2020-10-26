@@ -1,0 +1,40 @@
+<!-- Buildings Table -->
+<mat-table [dataSource]="buildings" class="mat-elevation-z8">
+
+  <!-- Name -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+  </ng-container>
+
+  <!-- Nickname -->
+  <ng-container matColumnDef="nickname">
+    <mat-header-cell *matHeaderCellDef> Nickname </mat-header-cell>
+    <mat-cell *matCellDef="let row; let i = index">
+
+        <!-- Multi Nicknames -->
+        <app-nicknames-input [nicknames]="row.nicknames" (changed)="cacheChangedNicknames($event, i)"></app-nicknames-input>
+
+    </mat-cell>
+  </ng-container>
+
+  <!-- Address -->
+  <ng-container matColumnDef="address">
+    <mat-header-cell *matHeaderCellDef> Address </mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{row.address}} </mat-cell>
+  </ng-container>
+
+  <!-- Description -->
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{row.description}} </mat-cell>
+  </ng-container>
+
+  <!-- Header and Row Declarations -->
+  <mat-header-row *matHeaderRowDef="['name', 'nickname', 'address', 'description']"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: ['name', 'nickname', 'address', 'description']"></mat-row>
+
+</mat-table>
+
+<!-- Submit -->
+<button mat-raised-button color="primary" (click)="saveBuildings()">Submit</button>

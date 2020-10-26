@@ -1,0 +1,17 @@
+<form [formGroup]="form">
+
+  <!-- Nicknames -->
+  <div *ngFor="let nickname of nicknames; let i = index">
+
+    <mat-form-field>
+      <input matInput type="text" placeholder="Nickname" [formControlName]="'nickname' + i" />
+    </mat-form-field>
+
+  </div>
+
+  <!-- New Nicknames-->
+  <mat-form-field>
+    <input matInput type="text" placeholder="Add Nickname" formControlName="newNickname" />
+  </mat-form-field>
+
+</form>
