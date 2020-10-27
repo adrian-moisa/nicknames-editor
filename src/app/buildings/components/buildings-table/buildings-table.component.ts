@@ -12,6 +12,8 @@ export class BuildingsTableComponent implements OnInit {
 
   public buildings: Building[];
   public buildingsCache: Building[];
+  public errorsCache: boolean[] = [];
+  public submitDisabled: boolean = false;
 
   constructor(private buildingsService: BuildingsService) { }
 
@@ -26,16 +28,21 @@ export class BuildingsTableComponent implements OnInit {
     this.buildingsCache[index].nicknames = nicknames;
   }
 
+  flagErrors(hasError, index: number): void {
+    this.errorsCache[index] = hasError;
+    this.submitDisabled = !!this.errorsCache.includes(true);
+  }
+
   private subscribeToBuildings(): void {
-    this.buildingsService.buildings.subscribe(buildings =>
-      this.buildings = buildings
-    );
+    this.buildingsService.buildings.subscribe(buildings => {
+      this.buildings = buildings;
+    });
   }
 
   saveBuildings(): void {
     this.buildingsService.buildings.next(this.buildingsCache);
-    console.log('SAVE')
-    console.log(this.buildingsCache)
-    console.log(JSON.stringify(this.buildingsCache, null, 2))
+    console.log('SAVE');
+    console.log(this.buildingsCache);
+    console.log(JSON.stringify(this.buildingsCache, null, 2));
   }
 }

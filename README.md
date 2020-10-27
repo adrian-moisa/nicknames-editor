@@ -11,6 +11,8 @@ Run in console `npm start`
 - `NicknamesInputComponent` - Form components multiple nicknames per building
 - Used Output to collect data from each `NicknamesInputComponent`
 - Emulated saving by pushing the new data to the console
+- Enable/Disable the submit button if duplicates are found
+- Tested form validation
 
-# Uncompleted
-- Testing. Ran out of time. For testing I would use Cypress.
+# Future Expansions
+- Introducing UUIDs will help with better targeting of the validation rules.

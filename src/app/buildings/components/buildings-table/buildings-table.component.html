@@ -13,7 +13,10 @@
     <mat-cell *matCellDef="let row; let i = index">
 
         <!-- Multi Nicknames -->
-        <app-nicknames-input [nicknames]="row.nicknames" (changed)="cacheChangedNicknames($event, i)"></app-nicknames-input>
+        <app-nicknames-input [nicknames]="row.nicknames"
+          (changed)="cacheChangedNicknames($event, i)"
+          (hasError)="flagErrors($event, i)">
+        </app-nicknames-input>
 
     </mat-cell>
   </ng-container>
@@ -37,4 +40,4 @@
 </mat-table>
 
 <!-- Submit -->
-<button mat-raised-button color="primary" (click)="saveBuildings()">Submit</button>
+<button id="submit-buildings" mat-raised-button color="primary" [disabled]="submitDisabled" (click)="saveBuildings()">Submit</button>

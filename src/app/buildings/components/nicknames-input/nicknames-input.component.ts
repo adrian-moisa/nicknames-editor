@@ -27,6 +27,7 @@ export class NicknamesInputComponent implements OnChanges {
 
   @Input() nicknames: string[];
   @Output() changed = new EventEmitter<string[]>();
+  @Output() hasError = new EventEmitter<boolean>();
 
   form: FormGroup;
   subscription: Subscription;
@@ -44,21 +45,43 @@ export class NicknamesInputComponent implements OnChanges {
   private buildDynamicForm(changes: SimpleChanges): void {
 
     // New Nickname
-    const newNickname = new FormControl('', [Validators.required], [this.isUniqueNicknameValidator]);
+    const newNickname = new FormControl('', [], [this.isUniqueNicknameValidator]);
     this.form = this.fb.group({ newNickname });
 
     // Subscribe
     this.subscription = this.form.valueChanges
-      .subscribe(val =>
-        this.changed.emit(this.mapNicknamesToArr(val))
-      );
+
+      // Each time the form is rebuilt by adding dynamic controls, it triggers change events.
+      // We need to ignore them
+      .pipe(skip(this.nicknames.length))
+      .subscribe(val => {
+
+        let hasError = false;
+
+        // tslint:disable-next-line: forin
+        for (const ctrlId in this.form.controls) {
+          const errors = this.form.controls[ctrlId].errors;
+          if (errors !== null) {
+            hasError = errors !== null;
+          }
+        }
+
+        // Export Values
+        this.hasError.emit(hasError);
+
+        // Export Values
+        this.changed.emit(
+          this.mapNicknamesToArr(val)
+        );
+      });
 
     // Nicknames
     const nicknames = changes.nicknames.currentValue;
     nicknames.forEach((nickname, i) =>
       this.form.addControl(
         'nickname' + i,
-        new FormControl(nickname, [Validators.required], [this.isUniqueNicknameValidator])
+        // TODO We need UUIDs in so we can use [this.isUniqueNicknameValidator] as well for existing projects
+        new FormControl(nickname, [Validators.required])
       )
     );
 
